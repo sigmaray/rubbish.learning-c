@@ -21,13 +21,14 @@ class EntryWindow(Gtk.Window):
                 entry_key.set_text(item)
                 hbox.pack_start(entry_key, True, True, 0)
 
-                entry_val = Gtk.Entry()
                 if type(value).__name__ == 'list' or type(value).__name__ == 'dict':
                     vbox2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
                     # vbox.add(vbox2)
                     hbox.pack_start(vbox2, True, True, 0)
                     self.add_entry(value, vbox2)            
                 else:
+                    entry_val = Gtk.Entry()
+                    entry_val.set_editable(False)
                     entry_val.set_text(str(value))
                     hbox.pack_start(entry_val, True, True, 0)
                     
