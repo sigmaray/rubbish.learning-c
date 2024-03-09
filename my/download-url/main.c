@@ -50,7 +50,19 @@ void button_clicked(GtkWidget *widget, gpointer data) {
   // alert(window, "clicked");
   // char* new_json = json_create();
   // write_file(new_json);
-  alert(window, "clicked");
+  // alert(window, "clicked");
+  int temp = download_temp();
+  // printf("temp: %d\n", temp);
+  // char *out;
+  // sprintf(&out, "temp: = %d", temp);
+  // gchar *out;
+  // g_sprintf
+  // alert(window, *out);
+  GString *s;
+  s = g_string_new("");
+  g_string_append_printf(s, "temp: = %d", temp);
+  alert(window, s->str );
+  // printf("%s", s->str);
 }
 
 int main(int argc, char *argv[]) {
