@@ -2,73 +2,25 @@
 
 #include <gtk/gtk.h>
 #include <cjson/cJSON.h>
+#include "read_file.c"
 #include "json_create.c"
 
-int read_file(gchar** contents) {
-  // g_file_get_contents("main.c")  
-  if (!g_file_get_contents("json.json", contents, NULL, NULL)) {
-      // printf("l9\n");
-      return FALSE;
-  }
-  // printf(contents);
-  // printf("l13\n");
-  return TRUE;
+GtkWidget *window;
+GtkWidget *view;
+GtkWidget *vbox;
+GtkWidget *btn;
+
+void button_clicked(GtkWidget *widget, gpointer data) {    
+  // g_print("clicked\n");
+  alert(window, "clicked");
 }
-
-/* return 1 if the monitor supports full hd, 0 otherwise */
-// int supports_full_hd(const char * const monitor)
-// {
-//     const cJSON *resolution = NULL;
-//     const cJSON *resolutions = NULL;
-//     const cJSON *name = NULL;
-//     int status = 0;
-//     cJSON *monitor_json = cJSON_Parse(monitor);
-//     if (monitor_json == NULL)
-//     {
-//         const char *error_ptr = cJSON_GetErrorPtr();
-//         if (error_ptr != NULL)
-//         {
-//             fprintf(stderr, "Error before: %s\n", error_ptr);
-//         }
-//         status = 0;
-//         goto end;
-//     }
-
-//     name = cJSON_GetObjectItemCaseSensitive(monitor_json, "name");
-//     if (cJSON_IsString(name) && (name->valuestring != NULL))
-//     {
-//         printf("Checking monitor \"%s\"\n", name->valuestring);
-//     }
-
-//     resolutions = cJSON_GetObjectItemCaseSensitive(monitor_json, "resolutions");
-//     cJSON_ArrayForEach(resolution, resolutions)
-//     {
-//         cJSON *width = cJSON_GetObjectItemCaseSensitive(resolution, "width");
-//         cJSON *height = cJSON_GetObjectItemCaseSensitive(resolution, "height");
-
-//         if (!cJSON_IsNumber(width) || !cJSON_IsNumber(height))
-//         {
-//             status = 0;
-//             goto end;
-//         }
-
-//         if ((width->valuedouble == 1920) && (height->valuedouble == 1080))
-//         {
-//             status = 1;
-//             goto end;
-//         }
-//     }
-
-// end:
-//     cJSON_Delete(monitor_json);
-//     return status;
-// }
 
 int main(int argc, char *argv[]) {
     
-  GtkWidget *window;
-  GtkWidget *view;
-  GtkWidget *vbox;
+  // GtkWidget *window;
+  // GtkWidget *view;
+  // GtkWidget *vbox;
+  // GtkWidget *btn;
   
   GtkTextBuffer *buffer;
 
@@ -81,7 +33,13 @@ int main(int argc, char *argv[]) {
 
   vbox = gtk_vbox_new(FALSE, 0);
   view = gtk_text_view_new();
+  btn = gtk_button_new_with_label("Click");
+  g_signal_connect(G_OBJECT(btn), "clicked", 
+      G_CALLBACK(button_clicked), NULL);
+
+  gtk_widget_set_size_request(btn, 70, 30);
   gtk_box_pack_start(GTK_BOX(vbox), view, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), btn, TRUE, TRUE, 0);
   buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(view));
   // gtk_text_buffer_set_text (buffer, "Hello, this is some text", -1);
   // char *monitor = create_monitor();
@@ -92,15 +50,19 @@ int main(int argc, char *argv[]) {
   gchar *maps;
   if (read_file(&maps)) {
     // GString s = g_string_new(&maps);
-    printf(&maps);
-    gtk_text_buffer_set_text (buffer, maps, -1);
+    // printf(&maps);
+    // gtk_text_buffer_set_text (buffer, maps, -1);
+    cJSON *parsed_json = cJSON_Parse(maps);
+    char *printed_json = cJSON_Print(parsed_json);
+    // gtk_text_buffer_set_text (buffer, printed_json, -1);
   }
   // printf(&maps);
   
 
   gtk_container_add(GTK_CONTAINER(window), vbox);
+  
 
-  alert(window, "message");
+  // alert(window, "message");
 
   // gtk_widget_show(window);
   gtk_widget_show_all(window);
