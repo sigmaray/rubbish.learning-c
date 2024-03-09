@@ -3,7 +3,7 @@
     "tasks": [
         {
             "options": {
-                "cwd": "${workspaceFolder}/my/json-parse/"
+                "cwd": "${workspaceFolder}/my/download-url/"
             },
             "type": "shell",
             "label": "run the makefile",

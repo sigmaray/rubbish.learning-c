@@ -60,7 +60,7 @@
           "type": "cppdbg",
           "request": "launch",
           // "program": "${workspaceFolder}/main.exe",
-          "program": "${workspaceFolder}/my/json-parse/main",
+          "program": "${workspaceFolder}/my/download-url/main",
           "args": [],
           "stopAtEntry": false,
           "cwd": "${fileDirname}",
