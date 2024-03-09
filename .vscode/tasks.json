@@ -1,0 +1,17 @@
+// https://hackernoon.com/how-to-set-up-c-debugging-in-vscode-using-a-makefile
+{
+    "tasks": [
+        {
+            "options": {
+                "cwd": "${workspaceFolder}/my/json-parse/"
+            },
+            "type": "shell",
+            "label": "run the makefile",
+            // "command": "/c/MinGW/bin/mingw32-make.exe",
+            "command": "make",
+            "args": ["main"],
+            "problemMatcher": [],
+        }
+    ],
+    "version": "2.0.0"
+}

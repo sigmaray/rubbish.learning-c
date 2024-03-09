@@ -3,76 +3,64 @@
 #include <gtk/gtk.h>
 #include <cjson/cJSON.h>
 
-char *create_monitor(void)
+int read_file(gchar** contents) {
+  // g_file_get_contents("main.c")  
+  if (!g_file_get_contents("json.json", contents, NULL, NULL)) {
+      // printf("l9\n");
+      return FALSE;
+  }
+  // printf(contents);
+  // printf("l13\n");
+  return TRUE;
+}
+
+/* return 1 if the monitor supports full hd, 0 otherwise */
+int supports_full_hd(const char * const monitor)
 {
-    const unsigned int resolution_numbers[3][2] = {
-        {1280, 720},
-        {1920, 1080},
-        {3840, 2160}
-    };
-    char *string = NULL;
-    cJSON *name = NULL;
-    cJSON *resolutions = NULL;
-    cJSON *resolution = NULL;
-    cJSON *width = NULL;
-    cJSON *height = NULL;
-    size_t index = 0;
-
-    cJSON *monitor = cJSON_CreateObject();
-    if (monitor == NULL)
+    const cJSON *resolution = NULL;
+    const cJSON *resolutions = NULL;
+    const cJSON *name = NULL;
+    int status = 0;
+    cJSON *monitor_json = cJSON_Parse(monitor);
+    if (monitor_json == NULL)
     {
+        const char *error_ptr = cJSON_GetErrorPtr();
+        if (error_ptr != NULL)
+        {
+            fprintf(stderr, "Error before: %s\n", error_ptr);
+        }
+        status = 0;
         goto end;
     }
 
-    name = cJSON_CreateString("Awesome 4K");
-    if (name == NULL)
+    name = cJSON_GetObjectItemCaseSensitive(monitor_json, "name");
+    if (cJSON_IsString(name) && (name->valuestring != NULL))
     {
-        goto end;
-    }
-    /* after creation was successful, immediately add it to the monitor,
-     * thereby transferring ownership of the pointer to it */
-    cJSON_AddItemToObject(monitor, "name", name);
-
-    resolutions = cJSON_CreateArray();
-    if (resolutions == NULL)
-    {
-        goto end;
-    }
-    cJSON_AddItemToObject(monitor, "resolutions", resolutions);
-
-    for (index = 0; index < (sizeof(resolution_numbers) / (2 * sizeof(int))); ++index)
-    {
-        resolution = cJSON_CreateObject();
-        if (resolution == NULL)
-        {
-            goto end;
-        }
-        cJSON_AddItemToArray(resolutions, resolution);
-
-        width = cJSON_CreateNumber(resolution_numbers[index][0]);
-        if (width == NULL)
-        {
-            goto end;
-        }
-        cJSON_AddItemToObject(resolution, "width", width);
-
-        height = cJSON_CreateNumber(resolution_numbers[index][1]);
-        if (height == NULL)
-        {
-            goto end;
-        }
-        cJSON_AddItemToObject(resolution, "height", height);
+        printf("Checking monitor \"%s\"\n", name->valuestring);
     }
 
-    string = cJSON_Print(monitor);
-    if (string == NULL)
+    resolutions = cJSON_GetObjectItemCaseSensitive(monitor_json, "resolutions");
+    cJSON_ArrayForEach(resolution, resolutions)
     {
-        fprintf(stderr, "Failed to print monitor.\n");
+        cJSON *width = cJSON_GetObjectItemCaseSensitive(resolution, "width");
+        cJSON *height = cJSON_GetObjectItemCaseSensitive(resolution, "height");
+
+        if (!cJSON_IsNumber(width) || !cJSON_IsNumber(height))
+        {
+            status = 0;
+            goto end;
+        }
+
+        if ((width->valuedouble == 1920) && (height->valuedouble == 1080))
+        {
+            status = 1;
+            goto end;
+        }
     }
 
 end:
-    cJSON_Delete(monitor);
-    return string;
+    cJSON_Delete(monitor_json);
+    return status;
 }
 
 int main(int argc, char *argv[]) {
@@ -95,9 +83,19 @@ int main(int argc, char *argv[]) {
   gtk_box_pack_start(GTK_BOX(vbox), view, TRUE, TRUE, 0);
   buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(view));
   // gtk_text_buffer_set_text (buffer, "Hello, this is some text", -1);
-  char *monitor = create_monitor();
+  // char *monitor = create_monitor();
   // printf("\"%s\"", monitor);
-  gtk_text_buffer_set_text (buffer, monitor, -1);
+  // gtk_text_buffer_set_text (buffer, monitor, -1);
+
+  // printf("supports_full_hd: %d", supports_full_hd("12345"));
+  gchar *maps;
+  if (read_file(&maps)) {
+    // GString s = g_string_new(&maps);
+    printf(&maps);
+    gtk_text_buffer_set_text (buffer, maps, -1);
+  }
+  // printf(&maps);
+  
 
   gtk_container_add(GTK_CONTAINER(window), vbox);
 
