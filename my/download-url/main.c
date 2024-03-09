@@ -45,6 +45,16 @@ GtkWidget *view;
 GtkWidget *vbox;
 GtkWidget *btn;
 
+char* get_time() {
+  GTimeVal curTime;
+	g_get_current_time(&curTime);
+  GDateTime* gdt = g_date_time_new_from_timeval_local(&curTime);
+  char *formatted = g_date_time_format(gdt,
+                    "%Y-%m-%dT%H:%M:%S.%f");
+  
+  return formatted;
+}
+
 void button_clicked(GtkWidget *widget, gpointer data) {    
   // g_print("clicked\n");
   // alert(window, "clicked");
@@ -60,19 +70,10 @@ void button_clicked(GtkWidget *widget, gpointer data) {
   // alert(window, *out);
   GString *s;
   s = g_string_new("");
-  g_string_append_printf(s, "temp: = %d", temp);
+  char *t = get_time();
+  g_string_append_printf(s, "temp: = %d\nlast fetched at: = %s", temp, t);
   alert(window, s->str );
   // printf("%s", s->str);
-}
-
-char* get_time() {
-  GTimeVal curTime;
-	g_get_current_time(&curTime);
-  GDateTime* gdt = g_date_time_new_from_timeval_local(&curTime);
-  char *formatted = g_date_time_format(gdt,
-                    "%Y-%m-%dT%H:%M:%S.%f");
-  
-  return formatted;
 }
 
 int main(int argc, char *argv[]) {
