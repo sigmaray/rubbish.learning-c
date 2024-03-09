@@ -65,7 +65,18 @@ void button_clicked(GtkWidget *widget, gpointer data) {
   // printf("%s", s->str);
 }
 
+char* get_time() {
+  GTimeVal curTime;
+	g_get_current_time(&curTime);
+  GDateTime* gdt = g_date_time_new_from_timeval_local(&curTime);
+  char *formatted = g_date_time_format(gdt,
+                    "%Y-%m-%dT%H:%M:%S.%f");
+  
+  return formatted;
+}
+
 int main(int argc, char *argv[]) {
+  get_time();
     
   // GtkWidget *window;
   // GtkWidget *view;

@@ -14,7 +14,7 @@ int download_temp() {
   // g_printf("%s\n", content);
   cJSON *parsed_json = cJSON_Parse(content);
   char *printed_json = cJSON_Print(parsed_json);
-  g_printf("%s\n", printed_json);
+  // g_printf("%s\n", printed_json);
 
   const cJSON *main = NULL;
   main = cJSON_GetObjectItemCaseSensitive(parsed_json, "main");
