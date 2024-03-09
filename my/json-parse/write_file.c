@@ -1,6 +1,6 @@
-int read_file(gchar** contents) {
+int write_file(gchar* contents) {
   // g_file_get_contents("main.c")  
-  if (!g_file_get_contents("in-json.json", contents, NULL, NULL)) {
+  if (!g_file_set_contents ("out-json.json", contents, -1, NULL)) {
       // printf("l9\n");
       return FALSE;
   }
