@@ -9,7 +9,7 @@
             "label": "run the makefile",
             // "command": "/c/MinGW/bin/mingw32-make.exe",
             "command": "make",
-            "args": ["main"],
+            "args": ["clean", "main"],
             "problemMatcher": [],
         }
     ],

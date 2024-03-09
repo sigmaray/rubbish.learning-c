@@ -4,4 +4,4 @@ main: main.c
 	gcc -g -w -o main main.c `pkg-config --libs --cflags gtk+-2.0` -lcjson
 
 clean:
-	rm main
+	@rm main || true

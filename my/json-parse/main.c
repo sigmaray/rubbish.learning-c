@@ -2,6 +2,7 @@
 
 #include <gtk/gtk.h>
 #include <cjson/cJSON.h>
+#include "json_create.c"
 
 int read_file(gchar** contents) {
   // g_file_get_contents("main.c")  
@@ -15,53 +16,53 @@ int read_file(gchar** contents) {
 }
 
 /* return 1 if the monitor supports full hd, 0 otherwise */
-int supports_full_hd(const char * const monitor)
-{
-    const cJSON *resolution = NULL;
-    const cJSON *resolutions = NULL;
-    const cJSON *name = NULL;
-    int status = 0;
-    cJSON *monitor_json = cJSON_Parse(monitor);
-    if (monitor_json == NULL)
-    {
-        const char *error_ptr = cJSON_GetErrorPtr();
-        if (error_ptr != NULL)
-        {
-            fprintf(stderr, "Error before: %s\n", error_ptr);
-        }
-        status = 0;
-        goto end;
-    }
+// int supports_full_hd(const char * const monitor)
+// {
+//     const cJSON *resolution = NULL;
+//     const cJSON *resolutions = NULL;
+//     const cJSON *name = NULL;
+//     int status = 0;
+//     cJSON *monitor_json = cJSON_Parse(monitor);
+//     if (monitor_json == NULL)
+//     {
+//         const char *error_ptr = cJSON_GetErrorPtr();
+//         if (error_ptr != NULL)
+//         {
+//             fprintf(stderr, "Error before: %s\n", error_ptr);
+//         }
+//         status = 0;
+//         goto end;
+//     }
 
-    name = cJSON_GetObjectItemCaseSensitive(monitor_json, "name");
-    if (cJSON_IsString(name) && (name->valuestring != NULL))
-    {
-        printf("Checking monitor \"%s\"\n", name->valuestring);
-    }
+//     name = cJSON_GetObjectItemCaseSensitive(monitor_json, "name");
+//     if (cJSON_IsString(name) && (name->valuestring != NULL))
+//     {
+//         printf("Checking monitor \"%s\"\n", name->valuestring);
+//     }
 
-    resolutions = cJSON_GetObjectItemCaseSensitive(monitor_json, "resolutions");
-    cJSON_ArrayForEach(resolution, resolutions)
-    {
-        cJSON *width = cJSON_GetObjectItemCaseSensitive(resolution, "width");
-        cJSON *height = cJSON_GetObjectItemCaseSensitive(resolution, "height");
+//     resolutions = cJSON_GetObjectItemCaseSensitive(monitor_json, "resolutions");
+//     cJSON_ArrayForEach(resolution, resolutions)
+//     {
+//         cJSON *width = cJSON_GetObjectItemCaseSensitive(resolution, "width");
+//         cJSON *height = cJSON_GetObjectItemCaseSensitive(resolution, "height");
 
-        if (!cJSON_IsNumber(width) || !cJSON_IsNumber(height))
-        {
-            status = 0;
-            goto end;
-        }
+//         if (!cJSON_IsNumber(width) || !cJSON_IsNumber(height))
+//         {
+//             status = 0;
+//             goto end;
+//         }
 
-        if ((width->valuedouble == 1920) && (height->valuedouble == 1080))
-        {
-            status = 1;
-            goto end;
-        }
-    }
+//         if ((width->valuedouble == 1920) && (height->valuedouble == 1080))
+//         {
+//             status = 1;
+//             goto end;
+//         }
+//     }
 
-end:
-    cJSON_Delete(monitor_json);
-    return status;
-}
+// end:
+//     cJSON_Delete(monitor_json);
+//     return status;
+// }
 
 int main(int argc, char *argv[]) {
     
@@ -98,6 +99,8 @@ int main(int argc, char *argv[]) {
   
 
   gtk_container_add(GTK_CONTAINER(window), vbox);
+
+  alert(window, "message");
 
   // gtk_widget_show(window);
   gtk_widget_show_all(window);
