@@ -58,6 +58,12 @@ class EntryWindow(Gtk.Window):
         with open(dir + '/in-json.json') as f:
         # with open(dir + '/arr.json') as f:
             str = f.read()
+
+        import requests
+        url = "https://api.openweathermap.org/data/2.5/weather?q=Berlin&lang=ru&units=metric&appid=5a043a1bd95bf3ee500eb89de107b41e"
+        #  url = "http://download.thinkbroadband.com/10MB.zip"
+        r = requests.get(url)
+        str = r.content
         parsed_json = json.loads(str)
         # for item in parsed_json:
         #     # type(v)
