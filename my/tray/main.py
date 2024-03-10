@@ -26,4 +26,25 @@ icon = pystray.Icon(
 
 
 # To finally show you icon, call run
-icon.run()
+# icon.run()
+icon.run_detached()
+# slee
+import time
+# time.sleep(10) 
+print("l34")
+
+######################
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
+app = QApplication([])
+window = QWidget()
+layout = QVBoxLayout()
+layout.addWidget(QPushButton('Top'))
+layout.addWidget(QPushButton('Bottom'))
+window.setLayout(layout)
+window.show()
+# app.exec()
+import sys
+app.exec()
+icon.stop()
+
+
